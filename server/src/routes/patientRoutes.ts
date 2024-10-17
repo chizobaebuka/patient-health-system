@@ -6,9 +6,9 @@ const router = express.Router();
 
 router.use(authMiddleware);
 
+router.post('/', createPatient);
 router.get('/', getPatients);
 router.get('/:id', getPatientById);
-router.post('/', createPatient);
 router.put('/:id', updatePatient);
 
 export default router;
