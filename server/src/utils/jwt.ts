@@ -1,5 +1,9 @@
 import jwt from 'jsonwebtoken';
 
 export const generateToken = (userId: string): string => {
-    return jwt.sign({ userId }, process.env.JWT_SECRET as string, { expiresIn: '1d' });
+    const secretKey = process.env.JWT_SECRET;
+    if (!secretKey) {
+        throw new Error('JWT secret key is missing');
+    }
+    return jwt.sign({ userId }, secretKey, { expiresIn: '1h' });
 };

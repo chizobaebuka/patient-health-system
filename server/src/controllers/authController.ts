@@ -12,12 +12,18 @@ export const register = async (req: Request, res: Response): Promise<void> => {
         }
         const user = new User({ email, password });
         await user.save();
-        const token = generateToken(String(user._id));
-        res.status(201).json({ token });
+        res.status(201).json({
+            user: {
+                id: user._id,
+                email: user.email,
+            },
+        });
     } catch (error) {
-        res.status(500).json({ message: 'Error registering user', error });
+        console.error('Error registering user:', error);
+        res.status(500).json({ message: 'An unexpected error occurred during user registration. Please try again later.' });
     }
 };
+
 
 export const login = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -30,6 +36,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         const token = generateToken(user._id as string);
         res.json({ token });
     } catch (error) {
-        res.status(500).json({ message: 'Error logging in', error });
+        console.error('Error logging in:', error);
+        res.status(500).json({ message: 'An unexpected error occurred during login. Please try again later.' });
     }
 };
