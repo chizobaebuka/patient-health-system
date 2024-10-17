@@ -6,6 +6,7 @@ import PriorAuthorizationForm from '../components/PriorAuthorizationForm';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorMessage from '../components/ErrorMessage';
 import { Patient } from '../types';
+import CreatePatientForm from '../components/CreatePatientForm'; // Import the form component
 
 const PatientDashboard: React.FC = () => {
     const [patients, setPatients] = useState<Patient[]>([]);
@@ -13,6 +14,7 @@ const PatientDashboard: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const [showCreateForm, setShowCreateForm] = useState(false); // Track form visibility
 
     useEffect(() => {
         fetchPatients();
@@ -40,6 +42,11 @@ const PatientDashboard: React.FC = () => {
         fetchPatients();
     };
 
+    const handleCreatePatientSuccess = () => {
+        setShowCreateForm(false);  // Hide the form after success
+        fetchPatients();  // Refresh patient list
+    };
+
     if (loading) return <LoadingSpinner />;
     if (error) return <ErrorMessage message={error} />;
 
@@ -60,6 +67,15 @@ const PatientDashboard: React.FC = () => {
                     </button>
                 </div>
             </form>
+
+            {/* Button to trigger the Create Patient form */}
+            <button
+                onClick={() => setShowCreateForm(true)}
+                className="bg-green-600 text-white px-4 py-2 mb-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-colors"
+            >
+                Add New Patient
+            </button>
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <PatientList patients={patients} onSelectPatient={setSelectedPatient} />
                 <div>
@@ -76,6 +92,14 @@ const PatientDashboard: React.FC = () => {
                     )}
                 </div>
             </div>
+
+            {/* Show the CreatePatientForm as a modal */}
+            {showCreateForm && (
+                <CreatePatientForm
+                    onClose={() => setShowCreateForm(false)}  // Close the form on cancel
+                    onSuccess={handleCreatePatientSuccess}    // Handle success action
+                />
+            )}
         </div>
     );
 };

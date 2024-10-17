@@ -6,6 +6,7 @@ import Header from './components/Header';
 import Login from './pages/Login';
 import PatientDashboard from './pages/PatientDashboard';
 import AuthorizationRequests from './pages/AuthorizationRequests';
+import Signup from './pages/SignUp';
 
 const PrivateRoute: React.FC<{ element: React.ReactElement }> = ({ element }) => {
   const { user } = useAuth();
@@ -21,6 +22,7 @@ const App: React.FC = () => {
           <main className="container mx-auto px-4 py-8">
             <Routes>
               <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
               <Route path="/" element={<PrivateRoute element={<PatientDashboard />} />} />
               <Route path="/authorizations" element={<PrivateRoute element={<AuthorizationRequests />} />} />
             </Routes>
